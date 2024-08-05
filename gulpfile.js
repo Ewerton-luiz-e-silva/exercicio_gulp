@@ -14,7 +14,7 @@ function comprimeImagens() {
 }
 
 // Função para minificar e ofuscar arquivos JavaScript
-function comprimeJavaScript(){
+function comprimeJavaScript() {
     return gulp.src('./source/scripts/*.js') // Fonte dos arquivos JavaScript
         .pipe(uglify()) // Minifica os arquivos JavaScript
         .pipe(obfuscate()) // Ofusca os arquivos JavaScript
@@ -22,15 +22,20 @@ function comprimeJavaScript(){
 }
 
 // Função para compilar arquivos SASS para CSS
-function compilaSass(){
+function compilaSass() {
     return gulp.src('./source/styles/main.scss') // Fonte do arquivo SASS
         .pipe(sourcemaps.init()) // Inicializa a geração de mapas de origem
         .pipe(sass({
-        outputStyle: 'compressed' // Define o estilo de saída como comprimido
-    }))
+            outputStyle: 'compressed' // Define o estilo de saída como comprimido
+        }).on('error', sass.logError)) // Adiciona tratamento de erros do Sass
         .pipe(sourcemaps.write('./maps')) // Escreve os mapas de origem
         .pipe(gulp.dest('./build/styles')); // Salva o arquivo CSS compilado no destino
 }
+
+// Exporta tarefas individuais
+exports.comprimeImagens = comprimeImagens;
+exports.comprimeJavaScript = comprimeJavaScript;
+exports.compilaSass = compilaSass;
 
 // Tarefa padrão que observa mudanças nos arquivos e executa as funções correspondentes
 exports.default = function() {
